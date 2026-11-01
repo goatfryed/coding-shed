@@ -1,0 +1,13 @@
+{
+  "id": "blender",
+  "version": "1.0.0",
+  "name": "Blender",
+  "options": {
+    "version": {
+      "type": "string",
+      "default": "5.2.3",
+      "proposals": ["5.2.3"],
+      "description": "Blender release version."
+    }
+  }
+}

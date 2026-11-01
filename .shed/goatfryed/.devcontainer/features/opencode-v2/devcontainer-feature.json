@@ -1,0 +1,20 @@
+{
+  "id": "opencode-v2",
+  "version": "1.0.0",
+  "name": "OpenCode CLI v2",
+  "description": "Installs OpenCode v2 via the official v2 installer",
+  "options": {
+    "version": {
+      "type": "string",
+      "proposals": ["latest", "2.1.4"],
+      "default": "latest",
+      "description": "Select or enter the version to install."
+    }
+  },
+  "postCreateCommand": "bash -- .devcontainer/features/opencode-v2/post-create.sh",
+  "installsAfter": [
+    "devcontainers/features/common-utils",
+    "devcontainers/features/rust",
+    "devcontainers-extra/features/bun"
+  ]
+}

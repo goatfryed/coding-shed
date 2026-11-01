@@ -1,0 +1,72 @@
+{
+  "name": "Raisin Canary",
+  "workspaceFolder": "/workspace",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "remoteUser": "developer",
+  "containerUser": "root",
+  "features": {
+    "ghcr.io/devcontainers-extra/features/bun:1": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/rust:1": {
+      "version": "1.99",
+      "profile": "default",
+      "components": "rust-analyzer,clippy,rustfmt"
+    },
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "username": "developer",
+      "userUid": "1000",
+      "userGid": "1000",
+      "configureZshAsDefaultShell": true
+    },
+    "../features/opencode-v2": {
+      "version": "latest"
+    },
+    "../features/jackdaw": {
+      "version": "0.20.0"
+    }
+  },
+  "runArgs": [
+    "--name=raisin-canaries",
+    "--gpus=all",
+    "--ipc=host",
+    "--net=host"
+  ],
+  "containerEnv": {
+    "NVIDIA_DRIVER_CAPABILITIES": "all",
+    "NVIDIA_VISIBLE_DEVICES": "all",
+    "OPENCODE_CONFIG_DIR": "/home/developer/.config/opencode",
+    "PULSE_SERVER": "unix:/tmp/pulse-socket/native",
+    "SHELL": "/bin/zsh",
+    "WAYLAND_DISPLAY": "${localEnv:WAYLAND_DISPLAY}",
+    "WINIT_UNIX_BACKEND": "wayland",
+    "XDG_RUNTIME_DIR": "/tmp/xdg-runtime"
+  },
+  "mounts": [
+    "source=${localEnv:XDG_RUNTIME_DIR}/${localEnv:WAYLAND_DISPLAY},target=/tmp/xdg-runtime/${localEnv:WAYLAND_DISPLAY},type=bind",
+    "source=${localEnv:XDG_RUNTIME_DIR}/pulse,target=/tmp/pulse-socket,type=bind",
+    "source=rustrover-cargo-cache,target=/home/developer/.cargo/registry,type=volume",
+    "source=raisin-canaries-opencode-data,target=/home/developer/.local/share/opencode,type=volume",
+    "source=rustrover-target-cache,target=${containerWorkspaceFolder}/target,type=volume"
+  ],
+  "customizations": {
+    "jetbrains": {
+      "settings": {
+        "org.jetbrains.plugins.terminal:app:TerminalOptionsProvider.myShellPath": "/bin/zsh",
+        "com.intellij.mcp:app:McpServerOptionsProvider.isServerEnabled": true
+      },
+      "backend": "RustRover",
+      "plugins": [
+        "com.intellij.plugins.visualvm",
+        "com.intellij.swagger",
+        "com.github.hechtcarmel.jetbrainsindexmcpplugin",
+        "com.github.lppedd.idea-conventional-commit",
+        "org.toml.lang"
+      ]
+    }
+  },
+  "updateContentCommand": "bash .devcontainer/features/update-content.sh; zsh .devcontainer/features/zsh-customize/update-content.sh"
+}

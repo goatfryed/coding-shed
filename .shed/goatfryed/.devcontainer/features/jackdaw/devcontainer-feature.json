@@ -1,0 +1,14 @@
+{
+  "id": "jackdaw",
+  "version": "1.0.0",
+  "name": "Jackdaw",
+  "description": "Installs the pinned Jackdaw Linux x86_64 release",
+  "options": {
+    "version": {
+      "type": "string",
+      "default": "0.20.0",
+      "proposals": ["0.20.0"],
+      "description": "Jackdaw release version."
+    }
+  }
+}

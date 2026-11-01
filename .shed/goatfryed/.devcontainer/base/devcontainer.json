@@ -1,0 +1,54 @@
+{
+  "name": "OpenCode Base",
+  "workspaceFolder": "/workspace",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "remoteUser": "developer",
+  "containerUser": "root",
+  "features": {
+    "ghcr.io/devcontainers-extra/features/bun:1": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "username": "developer",
+      "userUid": "1000",
+      "userGid": "1000",
+      "configureZshAsDefaultShell": true
+    },
+    "../features/opencode-v2": {
+      "version": "latest"
+    }
+  },
+  "runArgs": [
+    "--name=boilerplate-opencode-base",
+    "--gpus=all",
+    "--ipc=host",
+    "--net=host"
+  ],
+  "containerEnv": {
+    "NVIDIA_DRIVER_CAPABILITIES": "all",
+    "NVIDIA_VISIBLE_DEVICES": "all",
+    "OPENCODE_CONFIG_DIR": "/home/developer/.config/opencode",
+    "SHELL": "/bin/zsh",
+    "XDG_RUNTIME_DIR": "/tmp/xdg-runtime"
+  },
+  "mounts": [
+    "source=goatfryed-boilerplate-opencode-data,target=/home/developer/.local/share/opencode,type=volume"
+  ],
+  "customizations": {
+    "jetbrains": {
+      "backend": "RustRover",
+      "plugins": [
+        "com.intellij.plugins.visualvm",
+        "com.intellij.swagger",
+        "com.github.hechtcarmel.jetbrainsindexmcpplugin",
+        "com.github.lppedd.idea-conventional-commit",
+        "org.toml.lang"
+      ]
+    }
+  },
+  "updateContentCommand": "bash .devcontainer/features/update-content.sh; zsh .devcontainer/features/zsh-customize/update-content.sh"
+}

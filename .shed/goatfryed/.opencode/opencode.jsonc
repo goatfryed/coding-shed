@@ -1,0 +1,204 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "openai/gpt-6.1-sol",
+  "default_agent": "change-lead",
+  "agents": {
+    "change-lead": {
+      "mode": "primary",
+      "model": "openai/gpt-6.1-sol"
+    },
+    "context-engineer/engineer": {
+      "mode": "primary",
+      "model": "openai/gpt-6.1-sol",
+      "permissions": [
+        { "action": "subagent", "resource": "context-engineer/editor", "effect": "allow" },
+        { "action": "edit", "resource": ".opencode/agents/*", "effect": "allow" },
+        { "action": "edit", "resource": ".agents/skills/*", "effect": "allow" }
+      ]
+    },
+    "context-engineer/editor": {
+      "mode": "subagent",
+      "model": "openai/gpt-6-luna",
+      "permissions": [
+        { "action": "edit", "resource": ".opencode/agents/*", "effect": "allow" },
+        { "action": "edit", "resource": ".agents/skills/*", "effect": "allow" },
+        { "action": "edit", "resource": ".agents/skills/scripts/*", "effect": "deny" }
+      ]
+    },
+    "context-engineer/scripter": {
+      "mode": "subagent",
+      "model": "openai/gpt-6-luna",
+      "permissions": [
+        { "action": "edit", "resource": ".opencode/agents/*", "effect": "allow" },
+        { "action": "edit", "resource": ".agents/skills/scripts/*", "effect": "allow" }
+      ]
+    },
+    "designer/draft": {
+      "mode": "all",
+      "model": "openai/gpt-6-luna",
+      "permissions": [
+        { "action": "gpt_imagegen", "resource": "*", "effect": "allow" }
+      ]
+    },
+    "developer/junior": {
+      "mode": "subagent",
+      "model": "openai/gpt-6-luna"
+    },
+    "developer/senior": {
+      "mode": "all",
+      "model": "openai/gpt-6.1-sol"
+    },
+    "developer/standard": {
+      "mode": "subagent",
+      "model": "openai/gpt-6.1-sol"
+    },
+    "editor": {
+      "mode": "all",
+      "model": "openai/gpt-6-luna"
+    },
+    "product-owner": {
+      "mode": "primary",
+      "model": "openai/gpt-6.1-sol#high"
+    },
+    "researcher": {
+      "mode": "subagent",
+      "model": "openai/gpt-6-luna",
+      "permissions": [
+        { "action": "edit", "resource": "*", "effect": "deny"}
+      ]
+    },
+    "system-architect": {
+      "mode": "all",
+      "model": "openai/gpt-6.1-sol#high"
+    },
+    "blank-responder": {
+      "mode": "subagent",
+      "permissions": [
+        { "action": "*", "resource": "*", "effect": "deny" }
+      ]
+    }
+  },
+  "permissions": [
+    // -- DEFAULTS
+    { "action": "shell", "resource": "*", "effect": "ask" },
+    { "action": "external_directory", "resource": "*", "effect": "ask" },
+    { "action": "read", "resource": "*", "effect": "allow" },
+    { "action": "edit", "resource": "*", "effect": "ask" },
+
+    // agent scripts
+    { "action": "shell", "resource": ".agents/skills/*/scripts/*", "effect": "allow" },
+    { "action": "shell", "resource": "bin/*", "effect": "allow" },
+
+    // -- SHELL COMMONS
+    // safe reads
+    { "action": "shell", "resource": "bash -n *", "effect": "allow" },
+    { "action": "shell", "resource": "command -v *", "effect": "allow" },
+    { "action": "shell", "resource": "echo *", "effect": "allow" },
+    { "action": "shell", "resource": "grep *", "effect": "allow" },
+    { "action": "shell", "resource": "head *", "effect": "allow" },
+    { "action": "shell", "resource": "jq *", "effect": "allow" },
+    { "action": "shell", "resource": "ls *", "effect": "allow" },
+    { "action": "shell", "resource": "nl *", "effect": "allow" },
+    { "action": "shell", "resource": "pkg-config *", "effect": "allow" },
+    { "action": "shell", "resource": "printf *", "effect": "allow" },
+    { "action": "shell", "resource": "readlink *", "effect": "allow" },
+    { "action": "shell", "resource": "tail *", "effect": "allow" },
+    { "action": "shell", "resource": "test *", "effect": "allow" },
+    { "action": "shell", "resource": "yq *", "effect": "allow" },
+    { "action": "shell", "resource": "diff *", "effect": "allow" },
+    // safe writes, shell best tool
+    { "action": "shell", "resource": "rmdir *", "effect": "allow" },
+    { "action": "shell", "resource": "chmod *", "effect": "allow" },
+
+    // -- GIT
+    { "action": "shell", "resource": "git *", "effect": "allow" },
+    { "action": "shell", "resource": "git push*", "effect": "deny" },
+    { "action": "shell", "resource": "git reset --hard*", "effect": "ask" },
+    { "action": "shell", "resource": "git clean*", "effect": "ask" },
+    { "action": "shell", "resource": "git branch -D*", "effect": "ask" },
+    { "action": "shell", "resource": "git branch -d*", "effect": "ask" },
+    { "action": "shell", "resource": "git branch --delete*", "effect": "ask" },
+    { "action": "shell", "resource": "git prune*", "effect": "ask" },
+    { "action": "shell", "resource": "git gc*", "effect": "ask" },
+    { "action": "shell", "resource": "git reflog expire*", "effect": "ask" },
+
+    // -- RUST
+    { "action": "shell", "resource": "rustc *", "effect": "allow" },
+    { "action": "shell", "resource": "rustup component *", "effect": "allow" },
+    { "action": "shell", "resource": "rustfmt *", "effect": "allow" },
+    { "action": "shell", "resource": "cargo *", "effect": "allow" },
+    { "action": "shell", "resource": "cargo login*", "effect": "ask" },
+    { "action": "shell", "resource": "cargo owner*", "effect": "ask" },
+    { "action": "shell", "resource": "cargo publish*", "effect": "ask" },
+    { "action": "shell", "resource": "cargo yank*", "effect": "ask" },
+    { "action": "external_directory", "resource": "/home/rustdev/.cargo/registry/src/*", "effect": "allow" },
+
+    // -- JS/BUN
+    { "action": "shell", "resource": "bun install", "effect": "allow" },
+    { "action": "shell", "resource": "bun test *", "effect": "allow" },
+
+    // -- PROJECT FILES
+    { "action": "read", "resource": "*.env", "effect": "deny" },
+    { "action": "read", "resource": "*.env.*", "effect": "deny" },
+    { "action": "read", "resource": "*.template.env", "effect": "allow" },
+    { "action": "read", "resource": "*.secret*", "effect": "allow" },
+    // relevant shed tools are (sym)-linked anyway. so just consume through the linked path
+    { "action": "edit", "resource": ".shed", "effect": "deny" },
+
+    { "action": "edit", "resource": "target", "effect": "deny" },
+    { "action": "edit", "resource": "docs/*", "effect": "allow" },
+    { "action": "edit", "resource": "src/*", "effect": "allow" },
+    { "action": "edit", "resource": "README.md", "effect": "allow" },
+
+    //// AGENTIC
+    { "action": "edit", "resource": ".agents/*", "effect": "deny" },
+    { "action": "edit", "resource": ".agents/memories/*", "effect": "allow" },
+    { "action": "edit", "resource": ".agents/notes/*", "effect": "allow" },
+    { "action": "edit", "resource": ".agents/sessions/*", "effect": "allow" },
+    { "action": "edit", "resource": ".opencode/*", "effect": "deny" },
+    { "action": "edit", "resource": ".opencode/*", "effect": "deny" },
+    { "action": "read", "resource": ".agents/*", "effect": "allow" },
+    { "action": "read", "resource": ".opencode/*", "effect": "allow" },
+    { "action": "edit", "resource": ".shed/*/tests/*.actual.md", "effect": "allow" },
+
+    // MCP
+    { "action": "intellij_*", "resource": "*", "effect": "deny" },
+    { "action": "intellij_get_*", "resource": "*", "effect": "allow" },
+    { "action": "intellij_git_*", "resource": "*", "effect": "allow" },
+    { "action": "intellij_lint_*", "resource": "*", "effect": "allow" },
+    { "action": "intellij_list_directory_tree", "resource": "*", "effect": "allow" },
+    { "action": "intellij_open_file_in_editor", "resource": "*", "effect": "allow" },
+    { "action": "intellij_reformat_file", "resource": "*", "effect": "allow" },
+
+    // TOOLS
+    { "action": "gpt_imagegen", "resource": "*", "effect": "deny" },
+
+    // SAFEGUARDS
+    { "action": "shell", "resource": "sudo *", "effect": "ask" }
+  ],
+  "plugins": [
+    { "package": "opencode-websearch-addons@1.0.6" },
+    { "package": "opencode-imagen@0.1.0" }
+  ],
+  "websearch": {
+    "provider": "openai"
+  },
+  "mcp": {
+    "intellij": {
+      "enabled": true,
+      "type": "remote",
+      "url": "http://127.0.0.1:64522/stream",
+      "headers": {
+        "IJ_MCP_SERVER_PROJECT_PATH": "/workspace"
+      }
+    },
+    "intellij-index": {
+      "enabled": true,
+      "type": "remote",
+      "url": "http://127.0.0.1:29178/index-mcp/streamable-http"
+    }
+  },
+  "experimental": {
+    "todo": true
+  }
+}
