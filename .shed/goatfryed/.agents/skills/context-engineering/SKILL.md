@@ -23,5 +23,13 @@ metadata:
 - [writing.md](writing.md) explains how to write good instructions.
     Use, if you write skill, agent or other reusable agent instructions.
 
+## Grounding your answer
+When evidence is requested, state what it supports.
 
+An independent agent can provide an interpretation or behavioral sample untainted by our discussion.
+This suffices for common tasks such as instruction clarity, necessity or applicability.
+Use a blank responder by default unless expertise or tools are needed.
+Avoid leading prompts and combine its response with your assessment.
 
+## Common tasks
+Shorten/reduce with evidence: Ask an independent agent to remove obvious or commonly understood instruction parts.
