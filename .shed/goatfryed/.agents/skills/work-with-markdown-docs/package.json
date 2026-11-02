@@ -1,0 +1,11 @@
+{
+  "name": "markdown-docs",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "bun test"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.1"
+  }
+}
